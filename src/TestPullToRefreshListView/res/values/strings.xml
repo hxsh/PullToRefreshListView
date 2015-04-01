@@ -1,0 +1,8 @@
+<resources>
+
+    <string name="app_name">下拉刷新</string>
+    <string name="pull_to_refresh">下拉刷新</string>
+    <string name="text_position">这是第%1$d项</string>
+    <string name="click_position">您点击了第%1$d项</string>
+
+</resources>

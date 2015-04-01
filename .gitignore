@@ -25,3 +25,9 @@ proguard/
 
 # Log Files
 *.log
+
+src/library/bin
+src/library/gen
+
+src/TestPullToRefreshListView/bin
+src/TestPullToRefreshListView/gen
