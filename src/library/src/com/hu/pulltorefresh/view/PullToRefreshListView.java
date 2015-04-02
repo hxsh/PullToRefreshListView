@@ -3,6 +3,7 @@ package com.hu.pulltorefresh.view;
 import android.content.Context;
 import android.graphics.Point;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,8 +132,49 @@ public class PullToRefreshListView extends ListView {
 	}
 	
 	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
+	public boolean onTouchEvent(MotionEvent ev) {
 		switch (ev.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			Log.d("touch", "down");
+			if(MODE_REFRESH == mMode && !isRefreshing()){
+				prePullToRefreshView(ev.getX(), ev.getY());
+			}
+			break;
+		case MotionEvent.ACTION_MOVE:
+			Log.d("touch", "move");
+			if(mMode == MODE_REFRESH && mCanRefresh && !isRefreshing()){
+				if(mPreMotion == MOTION_DOWN){
+					mPreMotion = ((int) ev.getY() > mActionDownY) ? MOTION_MOVE_REFRESH : MOTION_MOVE_SCROLL_ITEM;
+					if(mPreMotion == MOTION_MOVE_REFRESH){
+						resetData();
+					}
+				}
+				if(mPreMotion == MOTION_MOVE_REFRESH){
+					pullToRefreshView(ev.getY());
+					if(mIsToUped){
+						return true;
+					}
+				}
+			}
+			break;
+		case MotionEvent.ACTION_CANCEL:
+		case MotionEvent.ACTION_UP:
+			Log.d("touch", "up");
+			if(mPreMotion == MOTION_MOVE_REFRESH){
+				releaseRefreshView();
+				return true;
+			}
+			break;
+			
+		default:
+			break;
+		}
+		return super.onTouchEvent(ev);
+	}
+	
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev) {
+		/*switch (ev.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			if(MODE_REFRESH == mMode && !isRefreshing()){
 				prePullToRefreshView(ev.getX(), ev.getY());
@@ -163,7 +205,7 @@ public class PullToRefreshListView extends ListView {
 			
 		default:
 			break;
-		}
+		}*/
 		return super.dispatchTouchEvent(ev);
 	}
 	
