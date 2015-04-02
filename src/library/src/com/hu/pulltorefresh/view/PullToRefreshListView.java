@@ -135,13 +135,11 @@ public class PullToRefreshListView extends ListView {
 	public boolean onTouchEvent(MotionEvent ev) {
 		switch (ev.getAction()) {
 		case MotionEvent.ACTION_DOWN:
-			Log.d("touch", "down");
 			if(MODE_REFRESH == mMode && !isRefreshing()){
 				prePullToRefreshView(ev.getX(), ev.getY());
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
-			Log.d("touch", "move");
 			if(mMode == MODE_REFRESH && mCanRefresh && !isRefreshing()){
 				if(mPreMotion == MOTION_DOWN){
 					mPreMotion = ((int) ev.getY() > mActionDownY) ? MOTION_MOVE_REFRESH : MOTION_MOVE_SCROLL_ITEM;
@@ -159,7 +157,6 @@ public class PullToRefreshListView extends ListView {
 			break;
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
-			Log.d("touch", "up");
 			if(mPreMotion == MOTION_MOVE_REFRESH){
 				releaseRefreshView();
 				return true;
@@ -170,43 +167,6 @@ public class PullToRefreshListView extends ListView {
 			break;
 		}
 		return super.onTouchEvent(ev);
-	}
-	
-	@Override
-	public boolean dispatchTouchEvent(MotionEvent ev) {
-		/*switch (ev.getAction()) {
-		case MotionEvent.ACTION_DOWN:
-			if(MODE_REFRESH == mMode && !isRefreshing()){
-				prePullToRefreshView(ev.getX(), ev.getY());
-			}
-			break;
-		case MotionEvent.ACTION_MOVE:
-			if(mMode == MODE_REFRESH && mCanRefresh && !isRefreshing()){
-				if(mPreMotion == MOTION_DOWN){
-					mPreMotion = ((int) ev.getY() > mActionDownY) ? MOTION_MOVE_REFRESH : MOTION_MOVE_SCROLL_ITEM;
-					if(mPreMotion == MOTION_MOVE_REFRESH){
-						resetData();
-					}
-				}
-				if(mPreMotion == MOTION_MOVE_REFRESH){
-					pullToRefreshView(ev.getY());
-					if(mIsToUped){
-						return true;
-					}
-				}
-			}
-			break;
-		case MotionEvent.ACTION_UP:
-			if(mPreMotion == MOTION_MOVE_REFRESH){
-				releaseRefreshView();
-				return true;
-			}
-			break;
-			
-		default:
-			break;
-		}*/
-		return super.dispatchTouchEvent(ev);
 	}
 	
 	private void prePullToRefreshView(float x, float y){
